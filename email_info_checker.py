@@ -58,28 +58,37 @@ def process_email(email):
 
 def main():
     os.makedirs("email_info", exist_ok=True)
-    output_file = os.path.join("email_info", f"email_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
 
-    print("Enter a single email or a comma-separated list of emails: ")
-    user_input = input("Email(s): ").strip()
-    emails = [email.strip() for email in user_input.split(",")]
+    # Making the script working in a loop until the user will not end the job
+    while True:
+        output_file = os.path.join("email_info", f"email_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
 
-    results = []
-    for email in emails:
-        results.append(process_email(email))
+        print("Enter a single email or a comma-separated list of emails (type 'q' for exit): ")
+        user_input = input("Email(s): ").strip()
 
-    # Save result(s) to file
-    with open(output_file, "w") as f:
-        f.write("Email Validation and Hosting Information Report\n")
-        f.write("=" * 50 + "\n\n")
-        for result in results:
-            f.write(f"Email: {result['Email']}\n")
-            f.write(f"Validation: {result['Validation']}\n")
-            f.write(f"Hosting Provider: {result['Hosting Provider']}\n")
-            f.write(f"Status: {result['Status']}\n")
-            f.write("-" * 50 + "\n")
+        # Ending the job
+        if user_input.lower() == 'q':
+            print("Finishing the job. Good Bye!")
+            break
 
-    print(f"Report saved to: {output_file}")
+        emails = [email.strip() for email in user_input.split(",")]
+        results = []
+        
+        for email in emails:
+            results.append(process_email(email))
+
+        # Save result(s) to file
+        with open(output_file, "w") as f:
+            f.write("Email Validation and Hosting Information Report\n")
+            f.write("=" * 50 + "\n\n")
+            for result in results:
+                f.write(f"Email: {result['Email']}\n")
+                f.write(f"Validation: {result['Validation']}\n")
+                f.write(f"Hosting Provider: {result['Hosting Provider']}\n")
+                f.write(f"Status: {result['Status']}\n")
+                f.write("-" * 50 + "\n")
+
+        print(f"Report saved to: {output_file}")
 
 
 if __name__ == "__main__":
